@@ -123,17 +123,90 @@ tl;dr: whitehouse.gov is a wordpress site.
 
 #### Find path to fontys.nl and fhict.nl
 
+I ran the command `mtr fhict.nl -i 5`, which produced the following output:
 
+```
+Host                                                                      Loss%   Snt   Last   Avg  Best  Wrst StDev
+1. 92-109-132-1.cable.dynamic.v4.ziggo.nl                                  0.0%    29   11.2  11.0   5.3  14.5   1.7
+2.     _gateway
+3.  2. 92-109-132-1.cable.dynamic.v4.ziggo.nl                              0.0%    29   11.2  12.7   9.7  26.4   3.4
+4.  3. 212.142.55.17                                                       0.0%    29   13.9  12.8   9.7  22.2   2.6
+5.  4. asd-tr0021-cr101-be111-2.core.as33915.net                           0.0%    29   19.0  15.7  10.8  20.2   2.2
+6.  5. nl-ams04a-ri3-ae51-0.core.as9143.net                                0.0%    29   15.6  18.3  13.3  25.7   3.4
+7.  6. ae78-0.asd001b-jnx-01.surf.net                                      0.0%    29   21.8  17.1  11.3  31.5   3.9
+8.  7. ae24.ut015b-jnx-01.surf.net                                         0.0%    29   18.0  18.3  13.9  31.9   3.5
+9.  8. ae21.ut001a-jnx-01.surf.net                                         0.0%    29   18.3  18.1  11.6  23.6   2.4
+10.  9. ae20.ehv001b-jnx-01.surf.net                                       0.0%    29   17.5  17.8  11.6  24.9   2.9
+11. 10. e4-0-2-0.ehv010a-jnx-01.surf.net                                   0.0%    29   17.5  17.8  15.2  23.9   2.0
+12. 11. fontys-router.customer.surf.net                                   28.6%    29   19.4  17.6  14.5  24.8   2.4
+13. 12. (waiting for reply)
+14. 13. (waiting for reply)
+15. 14. 145.85.4.1                                                         0.0%    29   46.5  34.4  16.1  66.8  13.7
+16. 15. (waiting for reply)
+```
+The option `-i 5`, helped with the address `fontys-router.customer.surf.net`, as with 1 second interval, the packet losses are around 80%. I think this might be some kind of firewall, security config setting.
+
+The same command for `fontys.nl`, didn't yield the results I expected:
+
+```
+Host                                                                      Loss%   Snt   Last   Avg  Best  Wrst StDev
+1. 92-109-132-1.cable.dynamic.v4.ziggo.nl                                  0.0%    83   12.0  11.8   3.8  18.8   2.2
+2.     _gateway
+3.  2. 92-109-132-1.cable.dynamic.v4.ziggo.nl                              0.0%    83   17.3  12.6   8.8  24.8   2.7
+4.  3. 212.142.55.17                                                       0.0%    83   12.9  12.6   7.7  20.9   2.2
+5.  4. asd-tr0021-cr101-be111-2.core.as33915.net                           0.0%    83   15.8  15.4  11.1  32.6   3.0
+6.  5. nl-ams14a-ri1-ae51-0.core.as9143.net                                0.0%    83   15.8  18.6  12.7  36.9   5.1
+7.  6. 99.83.114.20                                                        0.0%    83   20.9  16.0  10.8  27.7   3.4
+8.  7. 52.93.112.201                                                       0.0%    83   14.3  16.8  12.5  28.0   3.1
+9.  8. 54.239.114.147                                                      0.0%    83   22.9  17.4  10.6  39.2   5.2
+10.  9. (waiting for reply)
+```
+Couldn't trace back to the target address, even though I used the `-i 5` option and waited forever, but no sufficient result.
 
 #### DNS and email servers used by fontys.nl and fhict.nl
 
+To find the servers I used [DNSdumpster](https://dnsdumpster.com/).
 
+fontys.nl:
+
+```
+Namespace servers:      ns1.surfnet.nl, ns2.surfnet.nl
+Fontys DNS server:      hermes.fontys.nl
+Mail server:            fontys-nl.mail.protection.outlook.com
+```
+
+fhict.nl:
+```
+Namespace servers:      ns3.combell.net, ns4.combell.net
+Mail server:            fhict-nl.mail.protection.outlook.com
+```
 
 #### Find fhict.nl ip addresses
 
+I ran the command `theharvester -d fhict.nl -b sublist3r,threatminer,dnsdumpster -f output`, which scans sublist3r, threatminer and dnsdumpster for records on `fhict.nl`, and outputs the results to the files `output.xml` and `output.json`. After that I went through the file and manually selected the unique IPs as there weren't too many. If there were I probably would've wrote a script to automate it.
+
+[fhict_addresses_output.json](fhict_addresses_output.json)
+
+```
+Unique IPs:
+
+145.85.4.24
+145.85.4.70
+145.85.4.67
+145.85.4.99
+145.85.4.71
+145.85.4.6
+145.85.4.24
+145.85.4.20
+217.19.237.54       canvas.fhict.nl
+20.82.15.177        flowerpower.fhict.nl
+```
 
 
 #### Run theharvester on fontys.nl
 
+I ran the command `theharvester -d fontys.nl -b sublist3r,threatminer,dnsdumpster -f output`, and the output is in the following file:
+
+[fontys_harvester_output.json](fontys_harvester_output.json)
 
 
