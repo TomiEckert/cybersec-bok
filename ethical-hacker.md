@@ -8,6 +8,11 @@ date: 2022. 02. 20.
 
 ## Contents
 
+- [Basic hacking](#basic-hacking-and-pentesting-process)
+- [Law and ethics](#law-ethics-and-responsible-disclosure)
+- [Footprinting](#footprinting)
+- [Network scanning](#network-scanning)
+
 ## Basic hacking and Pentesting process
 
 ### What are the process steps of every pentest in general?
@@ -209,4 +214,4 @@ I ran the command `theharvester -d fontys.nl -b sublist3r,threatminer,dnsdumpste
 
 [fontys_harvester_output.json](fontys_harvester_output.json)
 
-
+## Network Scanning
